@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+#plt.ion()
 import pandas as pd
 from keras import Sequential
 from keras.layers import *
@@ -7,7 +8,6 @@ from sklearn.preprocessing import MinMaxScaler
 import math
 import shap
 from os.path import join
-import csv
 
 
 # Write experiment settings in a file
@@ -69,13 +69,14 @@ def build_model(input_shape, activation, layers_number, neurons_number, loss, op
 
     model.add(Dense(1))
 
-    model.compile(loss=loss, optimizer=optimizer_name, metrics=['mse', 'mae'])
+    model.compile(loss=loss, optimizer=optimizer_name, metrics=['mse', 'mae'], run_eagerly=True)
     return model
 
 
 # Train and validate the model according to specifications
 def train_and_validate_model(model, x_train, y_train, x_test, y_test, epochs, batch_size):
-    history = model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size, verbose=1,
+    verbose = 0
+    history = model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size, verbose=verbose,
                         validation_data=(x_test, y_test))
     return model, history
 
@@ -91,7 +92,7 @@ def plot_model_loss(history, experiment):
     plt.legend(loc='upper right')
     save_path = join('report', 'images', experiment + '_model_loss.png')
     plt.savefig(save_path)
-    plt.show()
+    #plt.show()
 
 
 # Plots the predicted result
@@ -107,16 +108,19 @@ def plot_prediction(y_test, predict_test, experiment):
     plt.legend(fontsize=15)
     save_path = join('report', 'images', experiment + '_predictions.png')
     plt.savefig(save_path)
-    plt.show()
+    #plt.show()
+
 
 # Plot SHAP values
 def plot_shap_values(model, x_test, experiment):
+    plt.figure()
     explainer = shap.Explainer(model.predict, x_test)
     shap_values = explainer(x_test)
     shap.plots.bar(shap_values, show=False)
     save_path = join('report', 'images', experiment + '_shap_values.png')
     plt.savefig(save_path)
-    plt.show()
+    #plt.show()
+
 
 # Scale back predicted values
 def scale_back_values(values, scaler):
@@ -127,8 +131,7 @@ def scale_back_values(values, scaler):
 
 # Builds and evaluates the model
 def build_and_evaluate_model(experiment, x_train, y_train, x_test, y_test, scaler, input_shape, activation,
-                             layers_number,
-                             neurons_number, loss, optimizer_name, epochs, batch_size):
+                             layers_number, neurons_number, loss, optimizer_name, epochs, batch_size):
     model = build_model(input_shape, activation, layers_number, neurons_number, loss, optimizer_name)
     model, history = train_and_validate_model(model, x_train, y_train, x_test, y_test, epochs, batch_size)
 

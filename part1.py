@@ -3,6 +3,7 @@ import configparser
 from time import strptime
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
+#plt.ion()
 from os.path import join
 
 ################# Read Settings #################
@@ -156,6 +157,7 @@ def get_data_by_location_and_value_type(df, location_id, value_type_id):
 
 # Inspect the data by producing time plots
 def inspect_data(df, location_id=None, value_type_id=None):
+    plt.figure()
     if location_id is None:
         location_id = 116.0
     if value_type_id is None:
@@ -168,7 +170,7 @@ def inspect_data(df, location_id=None, value_type_id=None):
     plt.title("Values for Location_id=" + str(location_id) + ' and Value_type_id=' + str(value_type_id))
     save_path = join('report', 'images', 'vis_data_' + str(value_type_id) + '_' + str(location_id) + '.png')
     plt.savefig(save_path)
-    plt.show()
+    #plt.show()
 
 
 # Apply data preprocessing
