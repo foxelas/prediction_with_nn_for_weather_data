@@ -13,7 +13,9 @@ This code was tested with PyCharm using Python 3.9 and Tensorflow 2.8.3.
 # Preparation
 (If .exe file is missing) Prepare the .exe file by running 
 $ pyinstaller --onefile -w 'app.py'  
-in the terminal  
+in the terminal. 
+
+Alternatively, message me.
 
 
 # Run
