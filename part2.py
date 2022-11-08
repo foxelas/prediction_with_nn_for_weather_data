@@ -1,7 +1,6 @@
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
-plt.ion()
+#plt.ion()
 import pandas as pd
 from keras import Sequential
 from keras.layers import *
